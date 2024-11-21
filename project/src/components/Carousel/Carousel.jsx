@@ -9,7 +9,7 @@
 // 2. 컴포넌트 사용(props로 )
 // <Carousel/>
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -26,11 +26,13 @@ const Carousel = () => {
 
   // 현재 슬라이드 위치
   const [currentIndex, setCurrentIndex] = useState(0);
+  // 호버링 여부
+  const [isHovered, setIsHovered] = useState(false);
 
   // 다음 버튼 클릭 시
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
+  }, [items.length]);
 
   // 이전 버튼 클릭 시
   const handlePrev = () => {
@@ -45,10 +47,30 @@ const Carousel = () => {
     preventScrollOnSwipe: true, // 스와이프 중 스크롤 방지
   });
 
+  // 호버 이벤트 핸들러
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
+  //   3초 후 자동 슬라이드
+  useEffect(() => {
+    if (isHovered) return; // 호버 상태에서는 타이머 설정 X
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3000);
+
+    return () => clearInterval(interval); // 기존 타이머 정리
+  }, [handleNext, isHovered]);
+
   return (
     <>
       {/* 캐러셀 컨테이너 */}
-      <CarouselContainer className="Carousel" {...handlers}>
+      <CarouselContainer
+        className="Carousel"
+        {...handlers}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {/* 슬라이드 컨테이너 */}
         <SlideContainer currentIndex={currentIndex}>
           {items.map((item, index) => (
