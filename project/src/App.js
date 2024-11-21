@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Page1 from "./pages/Page1";
 import Page2 from "./pages/Page2";
+import Page3 from "./pages/Page3";
 
 function App() {
   return (
@@ -10,9 +11,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Page1 />} />
           <Route path="/carousel" element={<Page2 />} />
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-          {/* <Route path="/contact" element={<Contact />} /> */}
+          <Route path="/path-animation" element={<Page3 />} />
+
           {/* 404 페이지 처리 */}
           <Route path="*" element={<h1>404 - Page Not Found</h1>} />
         </Routes>
